@@ -9,7 +9,7 @@
 <main>
 	<h1>Hello {name}!</h1>
 	<p>Visit the <a href="https://svelte.dev/tutorial" target="_blank">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-  <button on:click={insertHelloWorld} class="blue">Insert Hello World.</button>
+  <button on:click={insertHelloWorld} class="blue">Testing ADR logger.</button>
 </main>
 
 <style>
