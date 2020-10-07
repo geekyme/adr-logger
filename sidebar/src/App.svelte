@@ -2,7 +2,7 @@
   export let name;
 
   const insertHelloWorld = () => {
-    google.script.run.insertText("Hello World.");
+    google.script.run.insertText("Testing ADR logger");
   }
 </script>
 
