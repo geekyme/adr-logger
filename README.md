@@ -1,6 +1,14 @@
 # google-docs-addon-svelte-template
 A template repository to develop a Google Docs add-on with Svelte.
 
+
+## Installation
+
+1. `npm install`
+2. `cd sidebar/ && npm install`
+
+Then go back to root `cd ..` and proceed with the following steps.
+
 ## Getting Started
 
 1. Log in and authenticate with your Google account:
