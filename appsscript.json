@@ -5,6 +5,17 @@
   "runtimeVersion": "V8",
   "oauthScopes": [
     "https://www.googleapis.com/auth/documents.currentonly",
-    "https://www.googleapis.com/auth/script.container.ui"
-  ]
+    "https://www.googleapis.com/auth/script.container.ui",
+    "https://www.googleapis.com/auth/script.external_request"
+  ],
+  "dependencies": {
+    "libraries": [
+      {
+        "developmentMode": false,
+        "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
+        "userSymbol": "OAuth2",
+        "version": "38"
+      }
+    ]
+  }
 }
