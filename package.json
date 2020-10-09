@@ -4,15 +4,15 @@
   "description": "A google docs addon script that helps you log ADR",
   "main": "index.js",
   "scripts": {
-    "clasp:create": "clasp create",
-    "clasp:login": "clasp login --no-localhost",
-    "clasp:open": "clasp open",
+    "clasp:create": "npx clasp create",
+    "clasp:login": "npx clasp login --no-localhost",
+    "clasp:open": "npx clasp open",
     "build": "rm -fr ./sidebar/public/build && run-s build:ui build:ui:generate",
     "build:ui": "cd ./sidebar && npm run build",
     "build:ui:generate": "run-p build:ui:generate:*",
     "build:ui:generate:css": "echo '<style>' > ./src/stylesheet.html && cat ./sidebar/public/build/bundle.css >> ./src/stylesheet.html && echo '</style>' >> ./src/stylesheet.html",
     "build:ui:generate:js": "echo '<script>' > ./src/javascript.html && cat ./sidebar/public/build/bundle.js >> ./src/javascript.html && echo '</script>' >> ./src/javascript.html",
-    "deploy": "run-s build && clasp push",
+    "deploy": "run-s build && npx clasp push",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@google/clasp": "^2.3.0",
     "@types/google-apps-script": "^1.0.11",
+    "clasp": "^1.0.0",
     "npm-run-all": "^4.1.5"
   }
 }
