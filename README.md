@@ -1,6 +1,7 @@
-# google-docs-addon-svelte-template
-A template repository to develop a Google Docs add-on with Svelte.
+# ADR logger
+This is a Google Docs add-on that will help you log stuff to github. The use case is for [ADR logging](https://github.com/joelparkerhenderson/architecture_decision_record).
 
+The UI is developed in [Svelte](https://svelte.dev/) because it is easy to use for building components.
 
 ## Installation
 
@@ -43,3 +44,7 @@ This opens the Svelte sidebar.
 ## Sidebar development
 
 Navigate to the `sidebar` folder and develop & test the application as you would any regular Svelte application, i.e. `npm run dev`.
+
+## Demo
+
+Watch the [demo](./demo.mov) of how this add on works.
