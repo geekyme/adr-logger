@@ -3,14 +3,16 @@ This is a Google Docs add-on that will help you log stuff to github. The use cas
 
 The UI is developed in [Svelte](https://svelte.dev/) because it is easy to use for building components.
 
-## Installation
+## Setup
 
-1. `npm install`
-2. `cd sidebar/ && npm install`
+1. Ensure you have [node & npm](https://github.com/nvm-sh/nvm#install--update-script) installed
+2. clone this repo
+3. `npm install`
+4. `cd sidebar/ && npm install`
 
 Then go back to root `cd ..` and proceed with the following steps.
 
-## Getting Started
+## Connect to Google Apps Script
 
 1. Log in and authenticate with your Google account:
    ```
@@ -37,7 +39,7 @@ Once you followed the steps above and have the Apps Script project open, the fol
 1. Click **Select Doc** and choose a document you want to use for testing.
 1. Click **Save**
 1. In the *Execute Saved Test" section that appeared at the top, select your document and click **Test**.
-1. With the document now open, navigate to **Add-ons** | **Google-docs-addon-svelte-template** | **My Add-on**
+1. With the document now open, navigate to **Add-ons** menu
 
 This opens the Svelte sidebar.
 
