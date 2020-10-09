@@ -47,4 +47,4 @@ Navigate to the `sidebar` folder and develop & test the application as you would
 
 ## Demo
 
-Watch the [demo](./demo.mov) of how this add on works.
+Watch the [demo](./demo.mov) of how this add on works. The demo creates ADR into [this repo](https://github.com/geekyme/sample-adr)
