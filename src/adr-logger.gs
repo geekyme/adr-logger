@@ -1,9 +1,8 @@
-function commitSingleFileToGithub() {
+function commitSingleFileToGithub(username, repo) {
   // set token service
   Github.setTokenService(function(){ return getGithubService_().getAccessToken();});
   // set the repository wrapper
-  // Github.setRepo('YOUR_USERNAME', 'YOUR_REPO'); // e.g. Github.setRepo('geekyme', 'sample-adr');
-  Github.setRepo('geekyme', 'sample-adr'); 
+  Github.setRepo(username, repo); 
   var branch = 'master'; // you can switch to differnt branch
   
   // Sending string content
@@ -42,7 +41,7 @@ function getGithubAuthURL() {
     var service = getGithubService_();
     var authorizationUrl = service.getAuthorizationUrl();
     Logger.log(authorizationUrl);
-    return '<a href="'+authorizationUrl+'">Sign in with GitHub</a>'
+    return authorizationUrl;
 }
 
 /*
