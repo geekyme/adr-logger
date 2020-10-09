@@ -1,66 +1,3 @@
-/* 
-To use you need to create an application on Github at https://github.com/settings/developers
-The callback in this needs to be set to https://script.google.com/macros/d/{SCRIPT ID}/usercallback
-Where {SCRIPT ID} is the ID of the script that is using this library. You can find your script's ID in the Apps Script code editor by clicking on the menu item "File > Project properties".
-In this example code I've stored the apllicaitons clientId and clientSecret in the Script Properties:
-   - git_clientId
-   - git_clientSecret
-   
-More info on setting up oAuth2 library here https://github.com/googlesamples/apps-script-oauth2
-This example code has been put together by Martin Hawksey https://mashe.hawksey.info. Free to reuse as you like
-*/
-
-
-/**
- * Getting a file less than 1MB. 
- * See https://developer.github.com/v3/repos/contents/#get-contents
- */
-function getSmallFileFromGithub(){
-  // set token service
-  Github.setTokenService(function(){ return getGithubService_().getAccessToken();});
-  // set the repository wrapper
-  // Github.setRepo('YOUR_USERNAME', 'YOUR_REPO');
-  Github.setRepo('geekyme', 'sample-adr'); // e.g. Github.setRepo('geekyme', 'sample-adr');
-  var branch = 'heads/master'; // you can switch to differnt branch
-  
-  // getting a single file object
-  var git_file_obj = Github.Repository.getContents({ref: branch}, 'tweets/data/js/payload_details.js');
-  var git_file = Utilities.newBlob(Utilities.base64Decode(git_file_obj.content)).getDataAsString();
-  
-  var git_dir = Github.Repository.getContents({ref: branch}, 'tweets/data/js/');
-  // In my project I included a getContentsByUrl which uses a git url which is useful if working within the tree
-  var git_file_by_url = Github.Repository.getContentsByUrl(git_dir[0].git_url);
-  
-  Logger.log(git_dir);
-}
-
-/**
- * For files over 1MB you get to fetch as a blob using sha reference. 
- * See https://developer.github.com/v3/git/blobs/#get-a-blob
- */
-function getLargeFileFromGithub(){
-  // set token service
-  Github.setTokenService(function(){ return getGithubService_().getAccessToken();});
-  // set the repository wrapper
-  // Github.setRepo('YOUR_USERNAME', 'YOUR_REPO'); 
-  Github.setRepo('geekyme', 'sample-adr'); // e.g. Github.setRepo('geekyme', 'sample-adr');
-  var branch = 'heads/master'; // you can switch to differnt branch
-  
-  // first we get the git hub directory tree e.g. here getting the tweets sub-dir
-  var tweet_dir = Github.Repository.getContents({ref: 'master'}, 'tweets');
-  // filtering for the filename we are looking for
-  var git_file = tweet_dir.filter(function(el){ return el.name === 'tweets.csv' });
-  // getting the file
-  var git_blob = Utilities.newBlob(Utilities.base64Decode(Github.Repository.getBlob(git_file[0].sha).content)).getDataAsString();
-  
-  Logger.log(git_blob);
-}
-
-/**
- * Committing (creating/updating) a single file to github. 
- * See https://developer.github.com/v3/repos/contents/#create-a-file
- * and https://developer.github.com/v3/repos/contents/#update-a-file
- */
 function commitSingleFileToGithub() {
   // set token service
   Github.setTokenService(function(){ return getGithubService_().getAccessToken();});
@@ -80,59 +17,6 @@ function commitSingleFileToGithub() {
   }
 }
 
-/**
- * Adding multiple files to Github as a single commit.
- */
-function commitMultipleFilesToGithub() {
-  // set token service
-  Github.setTokenService(function(){ return getGithubService_().getAccessToken();});
-  // set the repository wrapper
-  //Github.setRepo('YOUR_USERNAME', 'YOUR_REPO'); // e.g. Github.setRepo('geekyme', 'sample-adr');
-  Github.setRepo('geekyme', 'sample-adr');
-  var branch = 'heads/master'; // you can switch to differnt branch
-  
-  var newTree = []; // new tree to commit
-  
-  // Sending string content
-  var test_json = {foo:'bar2'};
-  // building new tree, by pushing content to Github, here pushing test_json
-  newTree.push({"path": 'test2.json', // path includes path and filename - here adding test.json to repo root
-                "mode": "100644",
-                "type": "blob",
-                "sha" : Github.Repository.createBlob(JSON.stringify(test_json)).sha});
-   
-  // Sending a blob - grabbing an example file to push
-  var resp = UrlFetchApp.fetch("https://www.gstatic.com/images/icons/material/product/2x/apps_script_64dp.png");
-  
-  newTree.push({"path": 'apps_script_64dp.png', // path includes path and filename - here adding apps_script_64dp.png to repo root
-                "mode": "100644",
-                "type": "blob",
-                "sha" : Github.Repository.createBlob(resp.getBlob().getBytes()).sha});          
-                
-  /* using http://patrick-mckinley.com/tech/github-api-commit.html as ref for this process */
-  
-  // 1. Get the SHA of the latest commit on the branch
-  var initialCommitSha = Github.Repository.getRef(branch).object.sha;
-  
-  // 2. Get the tree information for that commit
-  var initialTreeSha = Github.Repository.getCommit(initialCommitSha).tree.sha;
-  
-  // 3. Create a new tree for your commit
-  var newTreeSha = Github.Repository.createTree(newTree, initialTreeSha).sha; 
-  
-  // 4. Create the commit
-  var newCommitSha = Github.Repository.commit(initialCommitSha, newTreeSha, "YOUR COMMIT MESSAGE HERE").sha;                
-  
-  // 5. Link commit to the reference
-  var commitResponse = Github.Repository.updateHead(branch, newCommitSha, false);
-}
-
-// From Eric Koleda oAuth2 setup
-// See https://github.com/googlesamples/apps-script-oauth2/blob/master/samples/GitHub.gs
-// LICENSE: https://github.com/googlesamples/apps-script-oauth2/blob/master/LICENSE
-/**
- * Configures the service.
- */
 function getGithubService_() {
     return OAuth2.createService('GitHub')
         .setAuthorizationBaseUrl("https://github.com/login/oauth/authorize")
@@ -144,9 +28,6 @@ function getGithubService_() {
         .setPropertyStore(PropertiesService.getUserProperties())
 }
 
-/**
- * Handles the OAuth callback.
- */
 function authCallbackGit(e) {
   var service = getGithubService_();
   var authorized = service.handleCallback(e);
@@ -157,9 +38,6 @@ function authCallbackGit(e) {
   }
 }
 
-/**
- * Logs the redict URI to register in the Google Developers Console, etc.
- */
 function getGithubAuthURL() {
     var service = getGithubService_();
     var authorizationUrl = service.getAuthorizationUrl();
