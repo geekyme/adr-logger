@@ -9,6 +9,10 @@
   }
 
   function logAdr() {
+    message = {
+      text: "Logging..."
+    };
+    
     google.script.run.withSuccessHandler(() => {
       message = {
         text: "ADR Logged!"

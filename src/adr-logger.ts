@@ -3,16 +3,49 @@ function commitSingleFileToGithub(username, repo) {
   Github.setTokenService(function(){ return getGithubService_().getAccessToken();});
   // set the repository wrapper
   Github.setRepo(username, repo); 
-  var branch = 'master'; // you can switch to differnt branch
+  var branch = 'master';
   
-  // Sending string content
-  var test_json = {foo:'bar'};
+  let contents = "";
+  var doc = DocumentApp.getActiveDocument();
+  var selection = doc.getSelection();
+  if (selection) {
+    var elements = selection.getRangeElements();
+    for (var i = 0; i < elements.length; i++) {
+      var element = elements[i];
+  
+      // Only get elements that can be edited as text; skip images and other non-text elements.
+      if (element.getElement().editAsText) {
+        var el = element.getElement();
+        var text = el.editAsText().getText();
+        var type = el.getType();
+
+        Logger.log("Element: %s, type: %s", text, el.getType());
+        switch (type.toString()) {
+          case "LIST_ITEM":
+            contents += `* ${text}\n`;
+            break;
+
+          case "PARAGRAPH":
+            contents += `### ${text}\n`;
+            break;
+            
+          default:
+            contents += `\n${text}\n`
+            break;
+        }
+      }
+    }
+  }
+
+  
+  Logger.log(contents);
+  var date = Utilities.formatDate(new Date(), "GMT+8", "yyyy-MM-dd");
+  var filename = `${date}__${doc.getName()}.md`;
   try { // if file exists need to get it's sha and update instead
-    var resp = Github.Repository.createFile(branch, 'test2.json', JSON.stringify(test_json), "YOUR FILE COMMIT MESSAGE HERE");
+    var resp = Github.Repository.createFile(branch, filename, contents, "Create new ADR");
   } catch(e) {
-    test_json.newbit = "some more data";
-    var git_file_obj = Github.Repository.getContents({ref: branch}, 'test2.json');
-    Github.Repository.updateFile(branch, 'test2.json', JSON.stringify(test_json), git_file_obj.sha, "YOUR UPDATED FILE COMMIT MESSAGE HERE");
+    var git_file_obj = Github.Repository.getContents({ref: branch}, filename);
+    Github.Repository.updateFile(branch, filename, contents, git_file_obj.sha, "Update ADR");
   }
 }
 
